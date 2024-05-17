@@ -3,51 +3,75 @@ namespace SpriteKind {
     export const Red = SpriteKind.create()
     export const Purple = SpriteKind.create()
 }
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Green, 100, function (sprite) {
+    spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 10)
+    if (spriteutils.getSpritesWithin(SpriteKind.Red, 10, sprite).length > 0) {
+        select = spriteutils.getSpritesWithin(SpriteKind.Red, 50, sprite)._pickRandom()
+        spriteutils.setVelocityAtAngle(sprite, 180 + spriteutils.angleFrom(sprite, select), 15)
+    }
+    if (spriteutils.getSpritesWithin(SpriteKind.Purple, 10, sprite).length > 0) {
+        select = spriteutils.getSpritesWithin(SpriteKind.Purple, 5, sprite)._pickRandom()
+        spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 1)
+    }
+})
 function spawnPurple () {
     purpleCell = sprites.create(assets.image`purpleCell`, SpriteKind.Purple)
     purpleCell.setPosition(randint(0, 160), randint(0, 120))
     purpleCell.setStayInScreen(true)
     purpleCell.setBounceOnWall(true)
 }
-spriteutils.onSpriteKindUpdateInterval(SpriteKind.Purple, 1000, function (sprite) {
-    spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 5)
+sprites.onOverlap(SpriteKind.Red, SpriteKind.Purple, function (sprite, otherSprite) {
+    sprites.destroy(sprite)
+    for (let index = 0; index < blockObject.getNumberProperty(blockObject.getStoredObject(sprite), NumProp.myNum); index++) {
+        spawnGreen(otherSprite.x, otherSprite.y)
+    }
 })
-function spawnRed () {
-    redCell = sprites.create(assets.image`redCell`, SpriteKind.Red)
-    redCell.setPosition(randint(0, 160), randint(0, 120))
-    redCell.setStayInScreen(true)
-    redCell.setBounceOnWall(true)
-}
-sprites.onOverlap(SpriteKind.Red, SpriteKind.Green, function (sprite, otherSprite) {
-    otherSprite.setImage(assets.image`redCell`)
-    otherSprite.setKind(SpriteKind.Red)
-})
-spriteutils.onSpriteKindUpdateInterval(SpriteKind.Red, 1000, function (sprite) {
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Red, 500, function (sprite) {
     spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 20)
     if (spriteutils.getSpritesWithin(SpriteKind.Green, 50, sprite).length > 0) {
         select = spriteutils.getSpritesWithin(SpriteKind.Green, 50, sprite)._pickRandom()
         spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 30)
     }
 })
-spriteutils.onSpriteKindUpdateInterval(SpriteKind.Green, 1000, function (sprite) {
-    spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 10)
-    if (spriteutils.getSpritesWithin(SpriteKind.Red, 50, sprite).length > 0) {
-        select = spriteutils.getSpritesWithin(SpriteKind.Red, 50, sprite)._pickRandom()
-        spriteutils.setVelocityAtAngle(sprite, 180 + spriteutils.angleFrom(sprite, select), 15)
-    }
+function spawnRed (x: number, y: number) {
+    redCell = sprites.create(assets.image`redCell`, SpriteKind.Red)
+    blockObject.storeOnSprite(blockObject.create(), redCell)
+    blockObject.setNumberProperty(blockObject.getStoredObject(redCell), NumProp.myNum, 0)
+    redCell.setPosition(x, y)
+    redCell.setStayInScreen(true)
+    redCell.setBounceOnWall(true)
+}
+sprites.onOverlap(SpriteKind.Red, SpriteKind.Green, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    spawnRed(otherSprite.x, otherSprite.y)
+    blockObject.setNumberProperty(blockObject.getStoredObject(sprite), NumProp.myNum, blockObject.getNumberProperty(blockObject.getStoredObject(sprite), NumProp.myNum) + 1)
 })
-function spawnGreen () {
+sprites.onOverlap(SpriteKind.Green, SpriteKind.Green, function (sprite, otherSprite) {
+    sprite.x += 1
+    sprite.y += 1
+    otherSprite.x += -1
+    otherSprite.y += -1
+})
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Purple, 100, function (sprite) {
+    spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 5)
+})
+function spawnGreen (x: number, y: number) {
     greenCell = sprites.create(assets.image`greenCell`, SpriteKind.Green)
-    greenCell.setPosition(randint(0, 160), randint(0, 120))
+    greenCell.setPosition(x, y)
     greenCell.setStayInScreen(true)
     greenCell.setBounceOnWall(true)
 }
 let greenCell: Sprite = null
-let select: Sprite = null
 let redCell: Sprite = null
 let purpleCell: Sprite = null
+let select: Sprite = null
 for (let index = 0; index < 50; index++) {
-    spawnGreen()
+    spawnGreen(randint(0, 160), randint(0, 120))
 }
-spawnRed()
+spawnRed(randint(0, 160), randint(0, 120))
 spawnPurple()
+game.onUpdateInterval(5000, function () {
+    if (sprites.allOfKind(SpriteKind.Red).length == 0) {
+        spawnRed(randint(0, 160), randint(0, 120))
+    }
+})
