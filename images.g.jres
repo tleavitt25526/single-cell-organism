@@ -1,0 +1,22 @@
+{
+    "l#0/+~;e": {
+        "data": "hwQBAAEAAAAHAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "greenCell"
+    },
+    "7S0h3mO~lJ`e_$wY{?gP": {
+        "data": "hwQCAAIAAAAiAAAAIgAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "redCell"
+    },
+    "image1": {
+        "data": "hwQDAAMAAACqCgAAqgoAAKoKAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "purpleCell"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
