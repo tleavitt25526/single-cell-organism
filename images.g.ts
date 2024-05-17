@@ -14,9 +14,11 @@ namespace myImages {
 `;
             case "image1":
             case "purpleCell":return img`
-a a a 
-a a a 
-a a a 
+a a a a a 
+a 3 3 3 a 
+a 3 3 3 a 
+a 3 3 3 a 
+a a a a a 
 `;
         }
         return null;

@@ -3,16 +3,22 @@ namespace SpriteKind {
     export const Red = SpriteKind.create()
     export const Purple = SpriteKind.create()
 }
-spriteutils.onSpriteKindUpdateInterval(SpriteKind.Green, 100, function (sprite) {
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Green, 1000, function (sprite) {
     spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 10)
-    if (spriteutils.getSpritesWithin(SpriteKind.Red, 10, sprite).length > 0) {
-        select = spriteutils.getSpritesWithin(SpriteKind.Red, 50, sprite)._pickRandom()
-        spriteutils.setVelocityAtAngle(sprite, 180 + spriteutils.angleFrom(sprite, select), 15)
-    }
+    
+    // if (spriteutils.getSpritesWithin(SpriteKind.Green, 10, sprite).length > 0) {
+    //     select = spriteutils.getSpritesWithin(SpriteKind.Green, 10, sprite)._pickRandom()
+    //     spriteutils.setVelocityAtAngle(sprite, 180 + spriteutils.angleFrom(sprite, select), 10)
+    // }
     if (spriteutils.getSpritesWithin(SpriteKind.Purple, 10, sprite).length > 0) {
-        select = spriteutils.getSpritesWithin(SpriteKind.Purple, 5, sprite)._pickRandom()
-        spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 1)
+        select = spriteutils.getSpritesWithin(SpriteKind.Purple, 10, sprite)._pickRandom()
+        spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 10)
     }
+    if (spriteutils.getSpritesWithin(SpriteKind.Red, 20, sprite).length > 0) {
+        select = spriteutils.getSpritesWithin(SpriteKind.Red, 20, sprite)._pickRandom()
+        spriteutils.setVelocityAtAngle(sprite, 180 + spriteutils.angleFrom(sprite, select), 10)
+    }
+    
 })
 function spawnPurple () {
     purpleCell = sprites.create(assets.image`purpleCell`, SpriteKind.Purple)
@@ -30,7 +36,7 @@ spriteutils.onSpriteKindUpdateInterval(SpriteKind.Red, 500, function (sprite) {
     spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 20)
     if (spriteutils.getSpritesWithin(SpriteKind.Green, 50, sprite).length > 0) {
         select = spriteutils.getSpritesWithin(SpriteKind.Green, 50, sprite)._pickRandom()
-        spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 30)
+        spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 50)
     }
 })
 function spawnRed (x: number, y: number) {
@@ -46,13 +52,7 @@ sprites.onOverlap(SpriteKind.Red, SpriteKind.Green, function (sprite, otherSprit
     spawnRed(otherSprite.x, otherSprite.y)
     blockObject.setNumberProperty(blockObject.getStoredObject(sprite), NumProp.myNum, blockObject.getNumberProperty(blockObject.getStoredObject(sprite), NumProp.myNum) + 1)
 })
-sprites.onOverlap(SpriteKind.Green, SpriteKind.Green, function (sprite, otherSprite) {
-    sprite.x += 1
-    sprite.y += 1
-    otherSprite.x += -1
-    otherSprite.y += -1
-})
-spriteutils.onSpriteKindUpdateInterval(SpriteKind.Purple, 100, function (sprite) {
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Purple, 10000, function (sprite) {
     spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 5)
 })
 function spawnGreen (x: number, y: number) {
@@ -70,8 +70,8 @@ for (let index = 0; index < 50; index++) {
 }
 spawnRed(randint(0, 160), randint(0, 120))
 spawnPurple()
-game.onUpdateInterval(5000, function () {
-    if (sprites.allOfKind(SpriteKind.Red).length == 0) {
-        spawnRed(randint(0, 160), randint(0, 120))
-    }
-})
+// game.onUpdateInterval(5000, function () {
+//     if (sprites.allOfKind(SpriteKind.Red).length == 0) {
+//         spawnRed(randint(0, 160), randint(0, 120))
+//     }
+// })
