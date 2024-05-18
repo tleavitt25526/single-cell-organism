@@ -35,17 +35,22 @@ sprites.onOverlap(SpriteKind.Red, SpriteKind.Purple, function (sprite, otherSpri
 // red behaviour
 spriteutils.onSpriteKindUpdateInterval(SpriteKind.Red, 100, function (sprite) {
     spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 20)
-    let targetList = spriteutils.getSpritesWithin(SpriteKind.Green, 50, sprite)
-    //.concat(spriteutils.getSpritesWithin(SpriteKind.Purple, 50, sprite))
+    let targetList = spriteutils.getSpritesWithin(SpriteKind.Green, 100, sprite).concat(spriteutils.getSpritesWithin(SpriteKind.Purple, 50, sprite))
+    //
     if (targetList.length > 0) {
-        if (blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite) == null
-            || Math.abs(sprite.vx) + Math.abs(sprite.vy) == 0) {
+        if (blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite) == null) {
             select = targetList._pickRandom()
             blockObject.setSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite, select)
-        } else { }
+            sprite.follow(blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite), redSpeed);
+        } else  {
+            //sprite.follow(null)
+            //spriteutils.setVelocityAtAngle(sprite, randint(0, 359), 20)
+            //sprite.sayText("huh?")
+        }
+        //sprite.follow(blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite), redSpeed);
+        blockObject.setSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite, select)
         //sprite.sayText(blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite).x)
         blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite).setImage(assets.image`targetCell`)
-        sprite.follow(blockObject.getSpriteProperty(blockObject.getStoredObject(sprite), SpriteProp.mySprite), redSpeed);
         //spriteutils.setVelocityAtAngle(sprite, spriteutils.angleFrom(sprite, select), 15)
     }
 })
