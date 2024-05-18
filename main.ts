@@ -98,6 +98,8 @@ for (let index = 0; index < 50; index++) {
 }
 spawnRed(randint(0, 160), randint(0, 120))
 spawnPurple()
+spawnPurple()
+spawnPurple()
 game.onUpdateInterval(5000, function () {
     if (sprites.allOfKind(SpriteKind.Red).length == 0) {
         spawnRed(randint(0, 160), randint(0, 120))
